@@ -72,8 +72,12 @@
                 ctx.fillRect(c.width / 4, 0, 5, c.height);
 
                 let linePos = lineJump;
+                let moeny = 0
+                let moneyJump = maxValue / 4
                 for (let i = 0; i < 4; i++) {
                     ctx.fillRect(c.width / 4 + linePos, 0, 3, c.height);
+                    ctx.fillStyle = 'black';
+                    ctx.fillText(`$${Math.round(moeny += moneyJump)}`, c.width / 4 + linePos, c.height - 20);
                     linePos += lineJump;
                 }
 
