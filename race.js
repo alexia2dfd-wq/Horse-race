@@ -24,36 +24,86 @@ window.addEventListener('resize', () => {
 
 
 let array = []
+let oldSig;
+let candidateSig;
+let confirmationCount = 2;
 let maxValue = 0
 let dollarMultiplier;
+let firstLoad = true;
 
 async function getNumbers() {
     const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRzLS1sOX_csa-Z0AoS4aWJ-4zA2kkeKo1X2rnbCHgqXaoWy26WvYKuAdpFt3DHie3BZ53l4Vk1Uh9t/pub?gid=0&single=true&output=csv'
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        cache: "no-store"
+    });
     const text = await response.text();
+    const newSig = text;
 
-    const rows = text.trim().split('\n');
+    if (firstLoad) {
+        updateGraph()
+        oldSig = newSig
+        firstLoad = false
+        setTimeout(() => {getNumbers()}, 5000);
+        return;
+    }
 
-    const selectedColumns = rows.map(row => {
-        const columns = row.split(',');
-        return [columns[0], columns[1], columns[2]];
-    });
+    if (!text || text === 'Loading...') {
+        setTimeout(() => {getNumbers()}, 1000);
+        console.log('Skipped this cycle: Lack of data')
+        return;
+    }
 
-    selectedColumns.forEach(element => {
-        if (parseInt(element[1]) > maxValue) {
-            maxValue = parseInt(element[1])
+    if (newSig === oldSig) {
+        setTimeout(() => {getNumbers()}, 5000);
+        confirmationCount = 0
+        console.log('Skipped this cycle: No new data')
+        return;
+    } else {
+
+        if (newSig === candidateSig) {
+            confirmationCount++
+            console.log('newSig confirmation: ' + confirmationCount)
+            if (confirmationCount > 1) {
+                oldSig = newSig
+                updateGraph()
+            }
         }
-    });
-    maxValue += 50
 
-    array = selectedColumns
-    dollarMultiplier = chartWidth / maxValue;
+        if (candidateSig != newSig) {
+            candidateSig = newSig
+            confirmationCount = 0
+        }
+        
+    }
+    setTimeout(() => {getNumbers()}, 5000);
 
-    requestAnimationFrame(drawFrame)
+    function updateGraph() {
+        const rows = text.trim().split('\n');
+        const selectedColumns = rows.map(row => {
+            const columns = row.split(',');
+            return [columns[0], columns[1], columns[2]];
+        });
+
+        maxValue = 0
+        selectedColumns.forEach(element => {
+            if (parseInt(element[1]) > maxValue) {
+                maxValue = parseInt(element[1])
+            }
+        });
+        maxValue += 50
+
+        array = selectedColumns
+        dollarMultiplier = chartWidth / maxValue;
+
+        currentAmount = 1
+        requestAnimationFrame(drawFrame)
+        console.log('updating graph')
+    }
 }
 getNumbers();
-setInterval(()=>{getNumbers();}, 180000);
+
+
 
 
 
