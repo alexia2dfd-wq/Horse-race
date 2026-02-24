@@ -11,11 +11,25 @@
             overflow: hidden;
             margin: 0;
         }
+        #image {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index 10;
+        }
+        #can {
+            position: absolute;
+            top: 600px;
+            left: 0;
+            z-index: 1;
     </style>
 </head>
 <body>
+    <img id="topImage" src="Test.png">
     <canvas id="can"></canvas>
     <script src="race.js"></script>
 </body>
 </html>
 8:54 
+
