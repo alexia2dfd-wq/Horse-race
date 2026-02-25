@@ -24,7 +24,7 @@ const pulseOpacityAmplitude = 0.08; // opacity variation → 0.08–0.18
 const baseOpacity = 0.3;        
 
 const bgImage = new Image();
-bgImage.src = 'Sigil.png'; 
+bgImage.src = 'img/Sigil.png'; 
 bgImageLoaded = false;
 
 bgImage.onload = () => {
@@ -33,16 +33,9 @@ bgImage.onload = () => {
 };
 
 function checkDimensions() {
-    const img = document.getElementById('topImage');
-    if (!img) return;
-
-    const renderedHeight = img.getBoundingClientRect().height;
-    const reservedFraction = 0.78;
-    const reservedHeight = renderedHeight * reservedFraction;
-
-    c.style.top = reservedHeight + "px";
-    c.width = window.innerWidth;
-    c.height = window.innerHeight - reservedHeight;
+    const header = document.getElementById('top-container')
+    c.width = window.innerWidth - 10;
+    c.height = window.innerHeight - header.getBoundingClientRect().height - 10; //Use normal flow instead of position absolute so now this can be simpler formula -CS
 
 
     chartWidth = c.width - c.width / 4;
@@ -197,7 +190,7 @@ function drawFrame(timestamp = 0) {
         const text = `$${amount}`;
         const textWidth = ctx.measureText(text).width;
         const padding = 5; 
-        ctx.fillText(text, c.width / 4 + linePos + padding, c.height - 18);
+        ctx.fillText(text, c.width / 4 + linePos + padding, c.height - (c.width / 50)); // Replace magic number to be proportional with how big the text is - CS
 
 
         linePos += lineJump;
@@ -261,12 +254,15 @@ function drawFrame(timestamp = 0) {
     // Tooltip
     if (hoveredBar) {
         const bar = barsInfo.find(b => b.item === hoveredBar);
+        const CSABTMNWOEB = 5; // CSABTMNWOEB aka Corrosive Scraps Arbitrary Buffer That Might Not Work On Everyones Browser
         if (bar) {
+            //Heres hopping this CSABTMNWOEB makes the text background fully cover the text -CS
             const tooltipText = `$${hoveredBar[1]}`;
             ctx.fillStyle = 'black';
-            ctx.fillRect(bar.x + bar.width + 10, bar.y - 10, ctx.measureText(tooltipText).width + 10, 24);
+            ctx.fillRect(bar.x + bar.width + CSABTMNWOEB, bar.y - CSABTMNWOEB, ctx.measureText(tooltipText).width + (CSABTMNWOEB * 2), 24 + (CSABTMNWOEB * 2));
+
             ctx.fillStyle = 'pink';
-            ctx.fillText(tooltipText, bar.x + bar.width + 15, bar.y + 2);
+            ctx.fillText(tooltipText, (bar.x + bar.width) + (CSABTMNWOEB * 2), bar.y + (bar.height / 2));
         }
     }
 

@@ -4,84 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horse Race</title>
-
-    <style>
-        body {
-            background: black;
-            overflow: hidden;
-            margin: 0;
-            position: relative;
-        }
-
-        .top-container {
-            position: relative;
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        #topImage {
-            display: block;
-            width: 20%;
-            height: auto;
-            margin: 0 auto;                    
-            position: relative;
-            z-index: 10;
-        }
-
-        .corner {
-            position: absolute;
-            top: 0;
-            width: 40%;                     
-            height: 78%;                     
-            pointer-events: none;
-            z-index: 5;                    
-            opacity: 1;                     
-        }
-
-        .left-corner {
-            left: 0;
-            background: url('Left.png') bottom left / cover no-repeat;
-        }
-
-        .right-corner {
-            right: 0;
-            background: url('Right.png') bottom right / cover no-repeat;
-        }
-
-        #can {
-            position: absolute;
-            left: 0;
-            top: 0;                          
-            z-index: 1;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 768px) {
-            #topImage {
-                width: 50%;
-            }
-            .corner {
-                width: 45%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="index.css" type="text/css">
 </head>
 <body>
 
-    <div class="top-container">
+    <div id="top-container">
         <div class="corner left-corner"></div>
+        <div id="buffer"></div>
         <div class="corner right-corner"></div>
-        <img id="topImage" src="Test.png" alt="Top banner">
+        <div id="topImage"></div>
     </div>
 
     <canvas id="can"></canvas>
 
-    <script src="race.js"></script>
+    <script src="index.js"></script>
 
 </body>
 
 </html>
+
 
 
 

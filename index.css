@@ -1,0 +1,61 @@
+body {
+    background: black;
+    overflow: hidden;
+    margin: 0;
+    position: relative;
+}
+
+#top-container {
+    position: relative;
+    display: flex;
+    height: 20vh;
+    background: red;
+    justify-content: center;
+}
+
+#topImage {
+    position: absolute;
+    top: 0px;
+    left: 40%;
+    height: 130%;
+    width: 20%;
+    background: url('img/Test.png') bottom;
+    background-size: cover;
+}
+
+.corner {
+    flex-basis: 40%;
+}
+
+.left-corner {
+    left: 0;
+    background: url('img/Left.png') bottom left / cover no-repeat
+}
+
+.right-corner {
+    right: 0;
+    background: url('img/Right.png') bottom right / cover no-repeat;
+}
+
+#buffer {
+    flex-basis: 20%;
+}
+
+#can {
+    border: 5px solid white;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    #topImage {
+        width: 50%;
+        translate: -30% 0;
+    }
+    .corner {
+        flex-basis: 25%;
+    }
+    #buffer {
+        flex-basis: 50%;
+    }
+
+}
