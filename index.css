@@ -1,48 +1,233 @@
-body {
-    background: black;
-    overflow: hidden;
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
     margin: 0;
+}
+
+body {
     position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 #top-container {
     position: relative;
+    background: url("img/bg.png") no-repeat center center / cover;
+    flex: 0 0 175px;
+}
+
+.top-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -41px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.alexia {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5%);
+    height: 100%;
+    width: auto;
+    max-width: none;
+    pointer-events: none;
+}
+
+#page-nav-container {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    height: auto;
+    z-index: 100;
+}
+
+#page-nav-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(128, 128, 128, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1;
     display: flex;
-    height: 20vh;
-    background: red;
+    align-items: center;
     justify-content: center;
 }
 
-#topImage {
+#page-nav-btn:hover {
+    background: rgba(128, 128, 128, 0.7);
+}
+
+#page-nav-btn::after {
+    content: '☰';
+    color: white;
+    font-size: 24px;
+}
+
+#page-nav-container.expanded #page-nav-btn {
+    width: 100%;
+    height: auto;
+    border-radius: 0 16px 0 0;
+    background: transparent;
+    padding: 15px;
+    position: relative;
+}
+
+#page-nav-container.expanded #page-nav-btn::after {
+    content: '✕';
+    font-size: 20px;
+}
+
+#page-nav {
     position: absolute;
-    top: 0px;
-    left: 40%;
-    height: 130%;
-    width: 20%;
-    background: url('img/Test.png') bottom;
-    background-size: cover;
-}
-
-.corner {
-    flex-basis: 40%;
-}
-
-.left-corner {
     left: 0;
-    background: url('img/Left.png') bottom left / cover no-repeat
+    top: 50px;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(128, 128, 128, 0.5);
+    border: none;
+    border-radius: 0 16px 16px 16px;
+    max-height: 90vh;
+    overflow-y: auto;
+    width: fit-content;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
 
-.right-corner {
-    right: 0;
-    background: url('img/Right.png') bottom right / cover no-repeat;
+#page-nav-container.expanded #page-nav {
+    opacity: 1;
+    pointer-events: auto;
 }
 
-#buffer {
-    flex-basis: 20%;
+.page-btn {
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.page-btn.active {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.page-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.page-btn.active:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 #can {
-    border: 5px solid white;
+    border: 2.5px solid white;
+}
+
+#loading-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 200;
+    display: none;
+}
+
+#loading-indicator.active {
+    display: block;
+}
+
+#refresh-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(128, 128, 128, 0.5);
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 99;
+}
+
+#refresh-btn:hover {
+    background: rgba(128, 128, 128, 0.7);
+}
+
+/* Portrait mode for mobile */
+@media (max-width: 768px) and (orientation: portrait) {
+    #top-container {
+        height: 15vh;
+    }
+
+    #topImage {
+        width: 30%;
+        translate: -20% 0;
+    }
+
+    .corner {
+        flex-basis: 35%;
+    }
+
+    #buffer {
+        flex-basis: 30%;
+    }
+
+    #can {
+        border: 3px solid white;
+    }
+
+    #refresh-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+        top: 15px;
+        right: 15px;
+    }
+
+    #page-nav-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 /* Mobile adjustments */
